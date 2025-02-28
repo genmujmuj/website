@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+
+a {
+    text-decoration: none;
+    color: rgb(23, 167, 76);
+    font-size: inherit;
+    }
+
+ul {
+    list-style-type: "> ";
+}
+
+.bordered{
+    border: solid 3px;
+    border-color: white;
+    padding: 5px;
+}
+
+.all{
+    display: flex;
+    flex-direction: row;
+    background-color: black;
+    font-family: 'Flexi IBM VGA False (437)', sans-serif;
+    color: azure;
+}
+
+.spacing_bar{
+    flex-grow: 10;
+}
+
+.content_all{
+    flex-grow: 80;
+    max-width: 850px;
+}
+
+.title_box{
+    /* height: 100px; */
+    display: flex;
+    border: solid 3px;
+    border-color: white;
+    margin-top: 50px;
+    flex-direction: row;
+    height: 70px;
+}
+
+.title_x{
+    background-color: white;
+    width: 3px;
+    height: 50px;
+    /* margin-left: 50%; */
+    /* margin-top: 50%; */
+}
+
+.main_text_box{
+    border: solid 3px;
+    border-color: white;
+    border-top: none;
+    padding-top: 5px;
+    padding-left: 3%;
+    padding-right: 3%;
+}
+
+.img_box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}.img_box > img{
+    min-width: 315px;
+}
+@media (max-width: 750px) {
+    .img_box > span{
+        padding-left: 25px;
+    }
+}
+
+.note_text{
+    /* padding-left: 5%;
+    padding-right: 5%; */
+    text-indent: 40px;
+    color: rgb(163, 163, 163);
+}
+
+#title1{
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 200%;
+    /* font-size: clamp(100%,200%,200%); */
+    padding-left: 30px;
+    padding-right: 30px;
+}
+@media (max-width: 750px) {
+    #title1{
+    font-size: 110%;
+}
+}
+
+#title_dv1{
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+}
+
+#title_dv2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
+    border: solid 3px;
+    border-color: white;
+    margin: -2px;
+    min-width: 70px;
+}
+
+#img1{
+    margin-top: 2%;
+    width: 90%;
+    
+}
+
+#img2{
+    margin-top: 2%;
+    width: 60%;
+    
+}
+
+#img3{
+    margin-top: 2%;
+    margin-bottom: 2%;
+    width: 70%;
+    
+}
+
+#imgMark{
+    width: 37%;
+}
+
+#imgTracks{
+    width: 70%;
+}
+
+#imgWheel{
+    width: 60%;
+}
+
+#imgTrack{
+    padding-top: 2%;
+    padding-bottom: 2%;
+    width: 60%;
+}
+
+#imgFullTrack{
+    padding-top: 2%;
+    width: 60%;
+}
+
+#amortyzator{
+    width: 70%;
+}
+
+#bok{
+    width: 60%;
+}
+
+#a_xray{
+    margin-top: 15px;
+    width: 60%;
+}
+
+#rys_motor{
+    width: 60%;
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+#clutch{
+    width: 60%;
+}
+
+#robot_naked{
+    width: 70%;
+}
+
+#robot_full{
+    margin-top: 15px;
+    width: 70%;
+}
+
+#schemat1{
+    width: 90%;
+}
+
+#schemat2{
+    width: 100%;
+}
+
+#pcb{
+    width: 70%;
+}
+
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The ROBOT project</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Tiny5&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/flexi-ibm-vga-false" rel="stylesheet">
+    <link rel="shortcut icon" href="img/icon.png" /> 
+</head>
+
+<body class="all" id="all">
+    <div class="spacing_bar"></div>
+    <div class="content_all">
+        <div class="title_box">
+            <div id="title_dv1">
+                <span id="title1"><span>C:\Portfolio\</span><span>The_Robot_project.txt</span></span>
+            </div>
+            <div id="title_dv2">
+                <div id="x1" class="title_x" style="transform: rotate(45deg); position: relative;"></div>
+                <div id="x2" class="title_x" style="transform: rotate(-45deg); position: absolute;"></div>
+            </div>
+        </div>
+        <div class="main_text_box">
+            <h2>Design and construction of a RC tracked vehicle, partially autonomous</h2>
+            <div class="img_box">
+                <img id="img2" src="img/robot/robot_img2.png" >
+            </div>
+            
+            <h2>BASIC OVERVIEW</h2>
+            <p>The project consisted of three main sub-projects:</p>
+            <ul>
+                <li>Mechanical design - the CAD project in SolidWorks and calculations;</li>
+                <li>Electrical design - circuit design, PCB design and electrical calculations;</li>
+                <li>Software design - developed an algorithm for radio-control and autonomous drive;</li>
+                <li>Manufacturing - 3D printed and cut the PMMA plates (zap zap laser), etc.;</li>
+                <li>Field tests - went outside to touch grass with it.</li>
+            </ul>
+            <p>After all that a remotely controlled tracked vehicle made using 3D printing technology (Janusz V3) came to be. It features:</p>
+            <ul>
+                <li>A continuous track drive system with suspension springs, driven by two DC motors with worm gear drives;</li>
+                <li>Radio control system using the FS-iA6b transceiver and remote;</li>
+                <li>Autonomous system, using two ultrasound sensors and a RPi3 for data acquisition (makes maps);</li>
+                <li>Transparent housing that allows the user to see the inner workings.</li>
+            </ul>
+            <div class="img_box"><img id="img1" src="img/robot/robot_img1.png"></div>
+            <br>
+            <h2>INTRO</h2>
+            <p>Ever since I was a child, I was fascinated with radio-controlled vehicles and tracked vehicles. Somehow the technology to send signals from a remote to a machine, that moves according to my will was magical. The highest of the techs.</p>
+            <p>When I was in middle school, I got into Arduino with my friend <a>Wrzosik</a>. We made quite a team. I knew nothing about programming and electronics at the time, but I had The Vision, and <a>Wrzosik</a> had the expertise to make it happen.</p>
+            <p>We made our first RC vehicle, based on Arduino, radio module, brushed DC motors and some cardboard. We called it Janusz V1. Unfortunately, no photographic record survived. Later in high school we made a Janusz V2.</p>
+            <p>The V2 was a great success (I took it to my high school and convinced my physics teacher to pass me).</p>
+            <div  class="img_box"><img class="bordered" id="img3" src="img/robot/robot_img3.png"></div>
+            <p>Years later, when it came to choosing topic for my engineering thesis, I have chosen to resurrect the Janusz project and make the V3, as I had The Vision and The Expertise now.</p>
+            <br>
+            <h2>MECHANICAL DESIGN</h2>
+            <p>The mechanical design started with an idea of a rough shape that the robot should take. I considered unusual designs, like the ones of tanks from WW1. Drafted first design in CAD inspired by the Mark III British tank.</p>
+            <p>It looked unusual (as I wanted it) but seemed that it would not be practical in my application. I needed something that could “turn in place” easily. I figured that probably the best way to do it was to make it so the top view of my tank is roughly square… and the Mark III was more of a long rectangle.</p>
+            <div class="img_box"><img id="imgMark" src="img/robot/mark3.png"></div>
+            <p>I found inspiration in my father's old drawings of tanks, and WALEE (tbh I don't know what was the first thing that came to my mind), but this was the design I went with.</p>
+            <p>I simplified the track to a chain and the drive wheels to octagons. I have chosen to set the sides of the octagons to 40mm and this represented the distance between the axels in the real links. This allowed me to easily represent the dimensions for later design.</p>
+            <div class="img_box"><img id="imgTracks" src="img/robot/bok_wymiary.png"></div>
+            <p>So, the drive wheels where also based on this octagon simplification. The outside octagon represents the track link – the side is 40 mm. The inside octagon is representing the bottom of the link [the sides are <span style="white-space: nowrap;">track_link_height / 2</span> away from the outside octagon].</p>
+            <div class="img_box"><img id="imgWheel" src="img/robot/robot_wheel.png"></div>
+            <p>The track links where pretty straight forward. The mounting axels where made 40 mm apart. The holes inside the tracks where put in the center of the track. Two of them gripped the wheel and the center one was for material reduction.</p>
+            <p class="note_text"><i>NOTE: The third hole did not reduce the weight, bcs a 3d-printed part filling is less dense than extra four walls that I created making this hole ):< </i></p>
+            <div class="img_box"><img id="imgTrack" src="img/robot/robot_track.png"></div>
+            <p>So assembling the whole drive system it looks somewhat like this:</p>
+            <div class="img_box"><img id="imgFullTrack" src="img/robot/robot_full_tracks.png"></div>
+            <p>After designing that I started to work on the suspension system, which would also have to tension the track. The track needs to be constantly tensioned so it won’t slip on the drive wheels. I came up with a design that should take of these two challenges at once.</p>
+            <p>The holding system for the wheels is connected to the housing by two linear bearings, that allow it to slide up and down. Under the bearing housing I installed a spring that creates tension if the holder tries to move upward, therefore creating a constant tension on the track. It also amortizes the vehicle.</p>
+            <div class="img_box"><img id="amortyzator" src="img/robot/robot_amortyzator.png"></div>
+            <p>Two of these holders were installed on each side of the vehicle. The top wheel was secured with a bearing.</p>
+            <div class="img_box"><img id="bok" src="img/robot/robot_bok.png"></div>
+            <p>In the lower part of this part is bearing housing for the wheel axis. I made calculation of how heavy my tank can be, based on the maximum bearing load. When it came to the rolling bearings – 1117 kg (unobtainable amount of mass XD), and the linear bearings – 452 kg (also a lil bit bigger that I think I can manage with 3d-printers).</p>
+            <p>The shaft is secured with a ring with a screw tightener and two bigger, slimmer rings inside the bearing housing. </p>
+            <div class="img_box"><img id="a_xray" src="img/robot/robot_amortyzator_xray.png"></div>
+            <p>Now that I finished the suspension system, I started to work on the clutch connecting the motors to the tracks. Because I needed to do it cheaply, I bought DC motors from WOLTZWAGEN. The motors were used to drive the windows up and down, so they already had the worm gear installed. Unfortunately, the motor axis had an unusual connector which made it hard to couple with the main drive shaft.</p>
+            <div class="img_box">
+                <img class="bordered" id="rys_motor" src="img/robot/rys_motorDCfoto.png">
+                <span>
+                    <span style="white-space: nowrap;">1-Motor housing;</span>
+                    <span style="white-space: nowrap;">2-coils;</span>
+                    <span style="white-space: nowrap;">3-commutator;</span>
+                    <span style="white-space: nowrap;">4-worm gear;</span>
+                    <span style="white-space: nowrap;">5-motor shaft.</span>
+                </span>
+            </div>
+            <p>Shafts are 8mm (tracks) and 16mm (motor) in diameter. With these dimensions buying an existing clutch would be too expensive for me at the time. I designed a permanently engaged clutch that connected to the shafts via friction. On each side the clutch has two jaws that squeeze on the shaft. Jaws are tensioned by a pair of M3 screws. The two sets of jaws also connect via M3s.</p>
+            <p class="note_text"><i>NOTE: In testing the robot, I found out that was the worst part of my design, as the clutches tended to be unreliable in the long run. I had to glue them to the shafts so they don’t disengage randomly. I recommend just using a keyway connection or just buying the commercially available clutches.</i></p>
+            <div class="img_box"><img id="clutch" src="img/robot/clutch_robot.png"></div>
+            <p>Last part of the CAD design was to make a housing for that big boi. To be honest here I was just designing it as simple as I could. I didn’t want to spend a lot of money on the materials so I just designed a PMMA box that fitted my requirements.</p>
+            <div class="img_box">
+                <img id="robot_naked" src="img/robot/robot_naked.png">
+                <span>|<br>|<br></span>
+                <span>\/</span>
+            </div>
+            <div class="img_box">
+                <img id="robot_full" src="img/robot/robot_full.png">
+            </div>
+            <h2>ELECTRICAL DESIGN & SOFTWARE</h2>
+            <p>In this part of the project firstly I had to select components for my vehicle. It felt like a putting together a puzzle. ESP32 would be nice, but it was 3.3V and all the other components where 5V. I could have used a voltage level shifter but thought of it as unnecessarily complicated at the time (I was wrong). At the end I used Arduino Nano as a main controller of the vehicle, and Raspberry Pi as a HMI system.</p>
+            <p>This is a list of the electrical components:</p>
+            <ol>
+                <li><i>Arduino Nano</i><br><span class="note_text">Controlling the motor driver, reading PWM from radio receiver and impulse signals from ultrasonic sensors, I2C communication with magnetometer</span></li>
+                <li><i>Raspberry Pi 3 B+ & LCD screen</i><br><span class="note_text">Drawing the map for the autonomous drive, sharing the map files (via a file server, on its WiFi network), showing the files on LCD</span></li>
+                <li><i>FS-iA6B</i><br><span class="note_text">Radio signal receiver, sends signals via PWM channels</span></li>
+                <li><i>IBT-2</i><br><span class="note_text">DC motors driver, drives motors (duh)</span></li>
+                <li><i>HC-SR04</i><br><span class="note_text">Ultrasonic distance sensor for wall detection</span></li>
+                <li><i>DC motors</i><br><span class="note_text">DC motors from an old Volkswagen Passat (window control)</span></li>
+                <li><i>QMC5883L</i><br><span class="note_text">Magnetometer (digital compass)</span></li>
+                <li><i>XY-3606</i><br><span class="note_text">Voltage stabilizer (5V)</span></li>
+                <li><i>LiPo 11.1V</i><br><span class="note_text">LiPo battery (1.2Ah) with an undercharge alarm</span></li>
+                <li><i>PCB</i><br><span class="note_text">A PCB I made to connect all the components together</span></li>
+                <li><i>Other small parts</i><br><span class="note_text">Resistors, diodes ...</span></li>
+            </ol>
+            <p>Firstly I started working on a PCB schematic to simplify the spaghetti of tangled wires I created while prototyping. I never did this before so I had to learn the EDA software. I have chosen KiCAD because it was free and its UI looked understandable to me.</p>
+            <p>This is the schematic I came up with for the PCB:</p>
+            <div class="img_box">
+                <img id="schemat1" src="img/robot/schemat1.png">
+            </div>
+            <p>It has two 15-pin headers so I can access any pin from the Arduino Nano, that’s in the center. On the lower left side you can see plugs for the motor driver control and a LED to indicate that the system is turned ON. On the right there are plugs for the power_in, sensor_in, i2c and radio connection.</p>
+            <p>So I made a PCB based on it:</p>
+            <div class="img_box">
+                <img id="pcb" class="bordered" src="img/robot/pcb.png">
+                <p>Trust me, that Rei is essential to the workings of the board.</p>
+            </div>
+            <p>Afterwards I made the circuit depicting the whole electrical system of the vehicle. On the top of the schematic there is a LiPo battery with a alarm system, switch and a voltage stabilizer module (to 5V). Raw voltage from the battery is fed directly to the motors via the drivers, and the rest is powered by that 5V. On the bottom there is a PCB with all the sensors and radio.</p>
+            <div class="img_box">
+                <img id="schemat2" src="img/robot/schemat2.png">
+            </div>
+
+        </div>
+    </div>
+    <div class="spacing_bar"></div>
+<script>
+    const rf_dv2 = document.getElementById("title_dv2");
+    const rf_x1 = document.getElementById("x1");
+    const rf_x2 = document.getElementById("x2");
+    const rf_all = document.getElementById("all");
+
+    function on() {
+        rf_dv2.style.setProperty("background-color", "white");
+        rf_x1.style.setProperty("background-color", "black");
+        rf_x2.style.setProperty("background-color", "black");
+        rf_x1.style.setProperty("width", "5px");
+        rf_x2.style.setProperty("width", "5px");
+    }
+    function off() {
+        rf_dv2.style.setProperty("background-color", "black");
+        rf_x1.style.setProperty("background-color", "white");
+        rf_x2.style.setProperty("background-color", "white");
+        rf_x1.style.setProperty("width", "3px");
+        rf_x2.style.setProperty("width", "3px");
+    }
+
+    function exit() {
+        console.log("exit");
+        window.close();
+    }
+
+    rf_dv2.addEventListener("mouseover", on);
+    rf_dv2.addEventListener("mouseout", off);
+    rf_dv2.addEventListener("click", exit);
+
+</script>
+
+</body>
+
+</html>
