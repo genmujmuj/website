@@ -136,6 +136,7 @@
         font-family: "Tiny5", sans-serif;
         color: #ffffff;
         font-size: 20px;
+        cursor: pointer;
     }
 
     .sw_line{
@@ -301,13 +302,13 @@
 
                 <div class="sw_container">
                     <div class="sw_title_box">
-                        <div class="sw_title_div">
+                        <div id="about_me_div" class="sw_title_div">
                             <span id="txt1" class="sw_title_text">About me</span><div class="sw_line"></div>
                         </div>
-                        <div class="sw_title_div">
+                        <div id="my_skills_div" class="sw_title_div">
                             <span id="txt2" class="sw_title_text">My skills</span><div class="sw_line"></div><div style="width: 15px;"></div>
                         </div>
-                        <div class="sw_title_div">
+                        <div id="portfolio_div" class="sw_title_div">
                             <span id="txt3" class="sw_title_text">Portfolio</span><div class="sw_line"></div>
                         </div>
                     </div>
@@ -473,8 +474,33 @@
                 rf_txt3.style.setProperty("color","rgb(23, 167, 76)");
             }
         }
+
+        function jumpToAbotMe() {
+            n=1;
+            counter();
+        }
+
+        function jumpToMySkills() {
+            n=0;
+            counter();
+        }
+        function jumpToPortfolio() {
+            n=-1;
+            counter();
+        }
+
         rf_knob.addEventListener("click", counter);
         counter();
+
+        rf_txt1.addEventListener("click",jumpToAbotMe);
+        // jumpToAbotMe();
+
+        rf_txt2.addEventListener("click",jumpToMySkills);
+        // jumpToMySkills();
+
+        rf_txt3.addEventListener("click",jumpToPortfolio);
+        // jumpToPortfolio();
+
 
         // function color() {
         //     i = i+1;
