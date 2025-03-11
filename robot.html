@@ -201,6 +201,10 @@ ul {
     width: 70%;
 }
 
+#robot_aero {
+    width: 60%;
+}
+
 </style>
 
 <head>
@@ -297,11 +301,18 @@ ul {
             <p>Last part of the CAD design was to make a housing for that big boi. To be honest here I was just designing it as simple as I could. I didn’t want to spend a lot of money on the materials so I just designed a PMMA box that fitted my requirements.</p>
             <div class="img_box">
                 <img id="robot_naked" src="img/robot/robot_naked.png">
-                <span>|<br>|<br></span>
+                <span>|<br>|</span>
                 <span>\/</span>
             </div>
+            
             <div class="img_box">
                 <img id="robot_full" src="img/robot/robot_full.png">
+            </div>
+            <h2><br>AND NOW...</h2>
+            <p>Aerodynamics of a robot:</p>
+            <div class="img_box">
+                <img style="cursor: pointer;" title="Aerodynamics of a robot" class="bordered" id="robot_aero" src="img/robot/aerodynamics.png">
+                <p class="note_text"><i>Aerodynamics of a robot</i></p>
             </div>
             <h2>ELECTRICAL DESIGN & SOFTWARE</h2>
             <p>In this part of the project firstly I had to select components for my vehicle. It felt like a putting together a puzzle. ESP32 would be nice, but it was 3.3V and all the other components where 5V. I could have used a voltage level shifter but thought of it as unnecessarily complicated at the time (I was wrong). At the end I used Arduino Nano as a main controller of the vehicle, and Raspberry Pi as a HMI system.</p>
@@ -343,6 +354,12 @@ ul {
     const rf_x1 = document.getElementById("x1");
     const rf_x2 = document.getElementById("x2");
     const rf_all = document.getElementById("all");
+    const rf_aero = document.getElementById("robot_aero");
+
+
+    function popup1() {
+        alert("Aerodynamics of a robot !!!");
+    }
 
     function on() {
         rf_dv2.style.setProperty("background-color", "white");
@@ -367,7 +384,7 @@ ul {
     rf_dv2.addEventListener("mouseover", on);
     rf_dv2.addEventListener("mouseout", off);
     rf_dv2.addEventListener("click", exit);
-
+    rf_aero.addEventListener("click",popup1);
 </script>
 
 </body>
