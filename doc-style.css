@@ -1,0 +1,80 @@
+a {
+    text-decoration: none;
+    color: rgb(23, 167, 76);
+    font-size: inherit;
+    }
+
+ul {
+    list-style-type: "> ";
+}
+
+.bordered{
+    border: solid 3px;
+    border-color: white;
+    padding: 5px;
+}
+
+.all{
+    display: flex;
+    flex-direction: row;
+    background-color: black;
+    font-family: 'Flexi IBM VGA False (437)', sans-serif;
+    color: azure;
+}
+
+.spacing_bar{
+    flex-grow: 10;
+}
+
+.content_all{
+    flex-grow: 80;
+    max-width: 850px;
+}
+
+.title_box{
+    /* height: 100px; */
+    display: flex;
+    border: solid 3px;
+    border-color: white;
+    margin-top: 50px;
+    flex-direction: row;
+    height: 70px;
+}
+
+.title_x{
+    background-color: white;
+    width: 3px;
+    height: 50px;
+    /* margin-left: 50%; */
+    /* margin-top: 50%; */
+}
+
+.main_text_box{
+    border: solid 3px;
+    border-color: white;
+    border-top: none;
+    padding-top: 5px;
+    padding-left: 3%;
+    padding-right: 3%;
+}
+
+.img_box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}.img_box > img{
+    min-width: 315px;
+}
+@media (max-width: 750px) {
+    .img_box > span{
+        padding-left: 25px;
+    }
+}
+
+.note_text{
+    /* padding-left: 5%;
+    padding-right: 5%; */
+    text-indent: 40px;
+    color: rgb(163, 163, 163);
+}
