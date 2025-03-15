@@ -1,4 +1,4 @@
-.dont_touch {
+    .dont_touch {
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
@@ -13,6 +13,10 @@
 
     ul {
         list-style-type: " -> ";
+    }
+
+    .exe_pic {
+        image-rendering: pixelated;
     }
 
     .green{

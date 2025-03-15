@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+
+#title1{
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 200%;
+    /* font-size: clamp(100%,200%,200%); */
+    padding-left: 30px;
+    padding-right: 30px;
+}
+@media (max-width: 750px) {
+    #title1{
+    font-size: 110%;
+ }
+}
+
+#title_dv1{
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+}
+
+#title_dv2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
+    border: solid 3px;
+    border-color: white;
+    margin: -2px;
+    min-width: 70px;
+}
+
+#box1 {
+    flex-grow: 1;
+}
+#box2 {
+    margin-top: 25px;
+    width: 150px;
+    height: 100%;
+}
+#box3 {
+    flex-grow: 1;
+}
+#box4 {
+    width: 200px;
+}
+
+#ok_button {
+    width: 100px;
+    height: 75px;
+}
+
+</style>
+
+<head>
+    <link rel="stylesheet" href="doc-style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Tiny5&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/flexi-ibm-vga-false" rel="stylesheet">
+    <link rel="shortcut icon" href="img/icon_2.png" />
+</head>
+
+<body class="all" id="all">
+    <div class="spacing_bar"></div>
+    <div class="content_all">
+        <div class="title_box">
+            <div id="title_dv1">
+                <span id="title1"><span>C:\Portfolio\</span><span>text-comparator.exe</span></span>
+            </div>
+            <div id="title_dv2">
+                <div id="x1" class="title_x" style="transform: rotate(45deg); position: relative;"></div>
+                <div id="x2" class="title_x" style="transform: rotate(-45deg); position: absolute;"></div>
+            </div>
+        </div>
+        <div class="main_text_box">
+            <h2 class="dont_touch">>> INPUT:</h2>
+            <div class="form_box">
+                <div id="box1" class="form_item_box">
+                    <input id="text1" type="text" placeholder=">text 1 ...">
+                    <input id="text2" type="text" placeholder=">text 2 ...">
+                </div>
+                <div id="box2" class="form_item_box">
+                    <input value="OK" id="ok_button" type="button" onclick="compare()">
+                </div>
+            </div>
+            <h2 class="dont_touch"><br>>> OUTPUT:</h2>
+            <div id="lower_box" class="form_out_box bordered">
+                <div id="box3" class="form_item_box">
+                    <span class="green dont_touch">></span><span id="text1_out"></span>
+                </div>
+                <div id="box4" class="form_item_box">
+                    <span class="green dont_touch">></span><span id="text2_out"></span>
+                </div>
+            </div>    
+        </div>
+    </div>
+    <div class="spacing_bar"></div>
+
+<script>
+    const rf_dv2 = document.getElementById("title_dv2");
+    const rf_x1 = document.getElementById("x1");
+    const rf_x2 = document.getElementById("x2");
+    const rf_all = document.getElementById("all");
+
+    const rf_text1form = document.getElementById("text1");
+    const rf_text2form = document.getElementById("text2");
+    const rf_text1out = document.getElementById("text1_out");
+    const rf_text2out = document.getElementById("text2_out");
+
+    function compare() {
+        var text1 = rf_text1form.value;
+        var text2 = rf_text2form.value;
+        var Set1 = [];
+        var Set2 = [];
+        var text1out = "";
+        var text2out = "";
+
+        console.log(">>>");
+        console.log(text1);
+        console.log(text2);
+        console.log(">>>");
+
+        let length;
+
+        if (text1.length >= text2.length){
+            length = text1.length+1;
+        } else{
+            length = text2.length+1;
+        }
+
+        var miss = [];
+
+        for (let n=0; n < length; n++) {
+            Set1[n]=text1.charAt(n);
+            Set2[n]=text2.charAt(n);
+            if (Set1[n] == Set2[n]) {
+                console.log("oki");
+                miss[n] = 0;
+            }
+            else {
+                console.log("mis");
+                miss[n] = 1;
+            }
+        }
+
+        for (let n=0; n < length; n++){
+            if(miss[n]==0){
+                text1out = text1out + Set1[n];
+                text2out = text2out + Set2[n];
+            }
+            else{
+                text1out = text1out + '<span class="highlight">';
+                text1out = text1out + Set1[n];
+                text1out = text1out + '</span>';
+
+                text2out = text2out + '<span class="highlight">';
+                text2out = text2out + Set2[n];
+                text2out = text2out + '</span>';
+            }
+        }
+
+        rf_text1out.innerHTML=text1out;
+        rf_text2out.innerHTML=text2out;
+    }
+    
+    function on() {
+        rf_dv2.style.setProperty("background-color", "white");
+        rf_x1.style.setProperty("background-color", "black");
+        rf_x2.style.setProperty("background-color", "black");
+        rf_x1.style.setProperty("width", "5px");
+        rf_x2.style.setProperty("width", "5px");
+    }
+    function off() {
+        rf_dv2.style.setProperty("background-color", "black");
+        rf_x1.style.setProperty("background-color", "white");
+        rf_x2.style.setProperty("background-color", "white");
+        rf_x1.style.setProperty("width", "3px");
+        rf_x2.style.setProperty("width", "3px");
+    }
+
+    function exit() {
+        //console.log("exit");
+        window.close();
+    }
+
+    rf_dv2.addEventListener("mouseover", on);
+    rf_dv2.addEventListener("mouseout", off);
+    rf_dv2.addEventListener("click", exit);
+
+    document.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById("ok_button").click();
+        }
+        }); 
+
+</script>
+
+</body>
+</html>
