@@ -15,10 +15,6 @@
         list-style-type: " -> ";
     }
 
-    .exe_pic {
-        image-rendering: pixelated;
-    }
-
     .green{
         color: rgb(23, 167, 76);
     }
@@ -236,6 +232,12 @@
     .portfolio_img{
         height: 150px;
         aspect-ratio: 1 / 1;
+    }
+
+    .exe_pic {
+        image-rendering: pixelated;
+        height: 100px;
+        margin: 25px;
     }
 
     .portfiolio_text{
