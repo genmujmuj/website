@@ -8,6 +8,10 @@ ul {
     list-style-type: "> ";
 }
 
+.special {
+    display: none;
+}
+
 .green {
     color:rgb(25, 143, 69);
 }
@@ -129,7 +133,7 @@ input[type=button]:hover {
 }
 .form_out_box {
     height: fit-content;
-    width: fit-content;
+    flex-grow: 1;
     font-size: 125%;
     margin-top: 20px;
     letter-spacing: 5px;
