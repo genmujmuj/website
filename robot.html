@@ -113,7 +113,7 @@
 }
 
 #schemat2{
-    width: 100%;
+    width: 90%;
 }
 
 #pcb{
@@ -122,6 +122,10 @@
 
 #robot_aero {
     width: 60%;
+}
+
+#laser {
+    width: 50%;
 }
 
 </style>
@@ -672,7 +676,7 @@
     <div class="content_all">
         <div class="title_box">
             <div id="title_dv1">
-                <span id="title1"><span>C:\Portfolio\</span><span>The_Robot_project.txt</span></span>
+                <span id="title1"><span>C:\Portfolio\</span><span>The_robot_project.txt</span></span>
             </div>
             <div id="title_dv2">
                 <div id="x1" class="title_x" style="transform: rotate(45deg); position: relative;"></div>
@@ -763,6 +767,7 @@
                 <img style="cursor: pointer;" title="Aerodynamics of a robot" class="bordered" id="robot_aero" src="img/robot/aerodynamics.png">
                 <p class="note_text"><i>Aerodynamics of a robot</i></p>
             </div>
+            <br>
             <h2>ELECTRICAL DESIGN & SOFTWARE</h2>
             <p>In this part of the project firstly I had to select components for my vehicle. It felt like a putting together a puzzle. ESP32 would be nice, but it was 3.3V and all the other components where 5V. I could have used a voltage level shifter but thought of it as unnecessarily complicated at the time (I was wrong). At the end I used Arduino Nano as a main controller of the vehicle, and Raspberry Pi as a HMI system.</p>
             <p>This is a list of the electrical components:</p>
@@ -794,7 +799,77 @@
             <div class="img_box">
                 <img id="schemat2" src="img/robot/schemat2.png">
             </div>
-
+            <br>
+            <h2>MANUFACTURING</h2>
+            <p>I made the parts using 3d-printers and a laser cutter provided by my university.</p>
+            <p>I used ENDER 3’s and PRUSA K1’s for the 3d printing. All of the parts where printed in PLA, because the uni didn’t want to use ABS (it can be toxic to ppl when printing).</p>
+            <p>PLA isn’t a bad material, but it has it’s issues. For example it will significantly soften when heated to ~60°C. Some of the mechanical parts can heat up over time to that temperature, so ABS would be a better fit for my project – but hell, peoples health is more important and I won’t argue with that!</p>
+            <p>The laser was used to cut the PMMA (plexiglass) sheets. Not much to say about that, besides that it smelled weird af. Laser be cutting. Here photo of laser cutting. Smurt laser :P</p>
+            <div class="img_box">
+                <img id="laser" class="bordered" src="img/robot/laser.png">
+            </div>
+            <br>
+            <h2>ASSEMBLY</h2>
+            <p>First I assembled the wheels and tracks. There where no significant issues with that, besides the fact, that the wheels shaft holes where too tight and needed to be re-drilled (my shaft was ⌀8mm and the holes where ~⌀7.8 mm).</p>
+            <div class="img_box">
+                    <img class="bordered" style="width: 50%;" src="img/robot/rys_ass_kolo.png">
+            </div>
+            <br>
+            <div class="img_box">
+                <img class="bordered" style="width: 50%;" src="img/robot/rys_gasienice.png">
+            </div>
+            <p>Then I made the suspension system. Springs and bearings fitted nicely, no issues there.</p>
+            <div class="img_box">
+                <img class="bordered" style="width: 50%;" src="img/robot/rys_ass_resor.png">
+            </div>
+            <p>I also assembled the electronics holders. I like how they look :3</p>
+            <div class="img_box">
+                <img class="bordered" style="width: 50%;" src="img/robot/rys_PCB_holder.png">
+            </div>
+            <p>Having done all that I printed the rest of the small connectors for my robot’s housing, and started assembling it. </p>
+            <div style="margin-left: -10%;" class="img_box">
+                <img class="bordered" style="width: 50%;" src="img/robot/robot_ass1.jpg">
+            </div>
+            <br>
+            <div style="margin-left: 20%;" class="img_box">
+                <img class="bordered" style="width: 50%;" src="img/robot/robot_ass2.jpg">
+            </div>
+            <br>
+            <div style="margin-left: -20%;" class="img_box">
+                <img class="bordered" style="width: 50%;" src="img/robot/robot_ass3.jpg">
+            </div>
+            <br>
+            <h2>FIELD TESTS</h2>
+            <p>So, after making the big guy I had to test it. I wrote some code for the Arduino and Raspberry and added a simple file server so I can download the map files easily from the robot.</p>
+            <p>To test the mapping-autonomous drive system, I made a small, simple track out of some stuff laying around my professor’s workshop. It had right and left turns, so I could test both possible scenarios. Later I made a bigger one, from chairs and foil XD</p>
+            <div class="img_box">
+                <img class="bordered" style="width: 50%;" src="img/robot/track2.png">
+            </div>
+            <br>
+            <div class="img_box">
+                <img class="bordered" style="width: 70%;" src="img/robot/track.png">
+            </div>
+            <br>
+            <p>The testing showed me that my algorithm was kinda dumb and needed a lot of tweaking. Mainly I had issues with the ultrasonic sensors. They love to give really dumb reading sometimes, or saying it more professionally: shit is prone to noise and false readings. The effect of that was that occasionally, the robot just turned randomly, even though there was no wall in front of it. </p>
+            <p>My solution to that was:</p>
+            <ul>
+                <li>Average the shit out of these readings: take 25 and average it;</li>
+                <li>Check twice: when robot would “detect” an object, I would make it go for another 0.25s and take the reading again. </li>
+            </ul>
+            <p>This seemed to fix the <i>shitty sensor issue</i>.</p>
+            <p>Other problem I had was with the magnetometer. The robot makes 90° turns based on its readings, BUT if the readings are shitty, the turns are just random. Sometimes it would turn endlessly, stuck like ants stuck in an ant mill, doomed to drain the battery and die (st00pid).</p>
+            <p>This happened because the workshop I was at had a lot of high power electronic equipment, and it created LOTS of magnetic noise. When I went outside and tested the turning, everything seemed fine.</p>
+            <p>I did not find a good fix for that, besides using timed turning or changing to a different type of sensor. At the end, I used the timed turning inside the workshop. It worked good enough. I also added a simple function that would correct the robots path, if it would get to close or to far away from the wall. </p>
+            <div class="img_box">
+                <img class="bordered" style="width: 70%;" src="img/robot/rys_robot_go.png">
+            </div>
+            <p>So, with these issues delt with, it worked. Mapped the track well and detected all the walls :3</p>
+            <br>
+            <p>To check the manual drive part, I just took it outside to touch some grass, as the guy was a basement dweller ever since it was assembled :P </p>
+            <div class="img_box">
+                <img class="bordered" style="width: 70%;" src="img/robot/rys_robot_teren.png">
+            </div>
+            <p>I think it liked the grass :3</p>
         </div>
     </div>
     <div class="spacing_bar"></div>
