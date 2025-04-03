@@ -56,7 +56,7 @@
             <div class="nav_bar_container">
 
                 <div class="lcd_box">
-                    <img id="banner1" src="img/web_baner_test.png">
+                    <img id="banner1" src="img/noice.gif">
                 </div>
 
                 <div class="sw_container">
@@ -194,10 +194,15 @@
         const rf_edu = document.getElementById("edu");
         const rf_portfolio = document.getElementById("portfolio");
         const rf_stuff = document.getElementById("stuff");
+        const rf_banner = document.getElementById("banner1");
 
+        let aboutMe_txt_link = "img/web_baner_aboutMe.gif";
+        let tic = 0;
         let n = 1; //pozycja startowa
         let i = 0; //color counter
+
         function counter() {
+            tic = 0;
             n = (n - 1) % 3;
             //console.log(n);
             sw1_sound.play();
@@ -208,12 +213,16 @@
                 rf_txt1.style.setProperty("font-size","23px");
                 rf_txt2.style.setProperty("font-size","20px");
                 rf_txt3.style.setProperty("font-size","20px");
+
                 rf_aboutme.style.setProperty("display","initial");
                 rf_edu.style.setProperty("display","none");
                 rf_portfolio.style.setProperty("display","none");
+
                 rf_txt1.style.setProperty("color","rgb(23, 167, 76)");
                 rf_txt2.style.setProperty("color","white");
                 rf_txt3.style.setProperty("color","white");
+
+                aboutMe_txt_link = "img/web_baner_aboutMe.gif";
             }
             else if(n==-1){
                 rf_knob.style.setProperty("transform", "rotate(0deg)");
@@ -227,6 +236,8 @@
                 rf_txt1.style.setProperty("color","white");
                 rf_txt2.style.setProperty("color","rgb(23, 167, 76)");
                 rf_txt3.style.setProperty("color","white");
+
+                aboutMe_txt_link = "img/banner_skills.gif";
             }
             else if(n==-2){
                 rf_knob.style.setProperty("transform", "rotate(-45deg)");
@@ -240,6 +251,8 @@
                 rf_txt1.style.setProperty("color","white");
                 rf_txt2.style.setProperty("color","white");
                 rf_txt3.style.setProperty("color","rgb(23, 167, 76)");
+
+                aboutMe_txt_link = "img/web_tank.gif";
             }
         }
 
@@ -257,6 +270,14 @@
             counter();
         }
 
+        function getNoice() {
+            rf_banner.src = "img/noice.gif";
+        }
+        function UNgetNoice() {
+
+            rf_banner.src = aboutMe_txt_link;
+        }
+        
         rf_knob.addEventListener("click", counter);
         counter();
 
@@ -269,13 +290,26 @@
         rf_txt3.addEventListener("click",jumpToPortfolio);
         // jumpToPortfolio();
 
+        function screen() {
+            tic = tic + 1;
+            if (tic < 5) {
+                getNoice();
+            }
+            else if(tic == 5) {
+                tic = 6;
+                UNgetNoice();
+            }
 
-        // function color() {
-        //     i = i+1;
-        //     f_stuff 
-        // }
+            if (tic > 100) {
+                tic = 100;
+            }
+            
+            console.info(tic);
+        }
 
-        // setInterval(color, 500);
+        setInterval(screen,100);
+
+
     </script>
 </body>
 </html>
