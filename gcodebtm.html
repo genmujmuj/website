@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+
+#title1{
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 200%;
+    /* font-size: clamp(100%,200%,200%); */
+    padding-left: 30px;
+    padding-right: 30px;
+}
+@media (max-width: 750px) {
+    #title1{
+    font-size: 110%;
+ }
+}
+
+#title_dv1{
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+}
+
+#title_dv2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
+    border: solid 3px;
+    border-color: white;
+    margin: -2px;
+    min-width: 70px;
+}
+
+#box1 {
+    flex-grow: 1;
+}
+#box2 {
+    margin-top: 25px;
+    width: 150px;
+    height: 100%;
+}
+#box3 {
+    flex-grow: 1;
+}
+#box4 {
+    width: 200px;
+}
+
+#ok_button {
+    width: 100px;
+    height: 75px;
+}
+
+#myCanvas {
+    margin-left: -10px;
+}
+
+</style>
+
+<head>
+    <link rel="stylesheet" href="program-style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G-Code BTM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Tiny5&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/flexi-ibm-vga-false" rel="stylesheet">
+    <link rel="shortcut icon" href="img/icon_2.png" />
+</head>
+
+<body class="all" id="all">
+    <p class="special">At that time Solomon assembled the el-
+        ders of Israel, all the tribal heads and the
+        ancestral leaders of the Israelites before him
+        at Jerusalem in order to bring the ark of the
+        Lord’s covenant from the city of David, that is
+        Zion. 2 So all the men of Israel were assembled
+        in the presence of King Solomon in the month
+        of Ethanim, which is the seventh month, b at
+        the festival.
+        3 All the elders of Israel came, and the priests
+        picked up the ark. 4 The priests and the Levites
+        brought the ark of the Lord, the tent of meet-
+        ing, and the holy utensils that were in the tent.
+        5 King Solomon and the entire congregation of
+        Israel, who had gathered around him and were
+        with him in front of the ark, were sacrificing
+        sheep, goats, and cattle that could not be count-
+        ed or numbered, because there were so many.
+        6 The priests brought the ark of the Lord’s
+        covenant to its place, into the inner sanctuary
+        of the temple, to the most holy place beneath
+        the wings of the cherubim. 7 For the cherubim
+        were spreading their wings over c the place of
+        the ark, so that the cherubim covered the ark
+        and its poles from above. 8 The poles were so
+        long that their ends were seen from the holy
+        place in front of the inner sanctuary, but they
+        were not seen from outside the sanctuary; they
+        are still there today. 9 Nothing was in the ark
+        except the two stone tablets that Moses had
+        put there at Horeb, d where the Lord made a
+        covenant with the Israelites when they came
+        out of the land of Egypt.
+        </p>
+    <div class="spacing_bar"></div>
+    
+        <div class="content_all">
+            <div class="title_box">
+                <div id="title_dv1">
+                    <span id="title1"><span>C:\Portfolio\</span><span>gcode-bitmap-conv.exe</span></span>
+                </div>
+                <div id="title_dv2">
+                    <div id="x1" class="title_x" style="transform: rotate(45deg); position: relative;"></div>
+                    <div id="x2" class="title_x" style="transform: rotate(-45deg); position: absolute;"></div>
+                </div>
+            </div>
+            <div class="main_text_box">
+                <input id="threshold" type="range" min="1" max="254"/>
+                <input id="bmpInput" type="file" accept=".bmp,.txt"/>
+                <input type="button" onclick="drawFile()" value="Go"/>
+                <input type="button" onclick="clearCanvas()" value="clear"/>
+                <canvas id="output_image" width="1000" height="1000"></canvas>
+                <div class="bordered" style="margin-top: 20px;">
+                    <h3 class="dont_touch note_text">Code out:</h3>
+                    <br>
+                    <p id="code_out"></p>
+                </div>
+            </div>
+        </div>
+    
+    <div class="spacing_bar"></div>
+
+<script>
+
+    const rf_dv2 = document.getElementById("title_dv2");
+    const rf_x1 = document.getElementById("x1");
+    const rf_x2 = document.getElementById("x2");
+    const rf_all = document.getElementById("all");
+
+    // const rf_gcode = document.getElementById("gcode-input");
+    const rf_input = document.getElementById("bmpInput");
+    const rf_img_out = document.getElementById("output_image")
+
+    const rf_output = document.getElementById("code_out");
+
+    // get file from FileInput
+
+    async function drawFile(){
+        clearCanvas();
+        getImageFromInput(rf_input);
+    }
+
+    function clearCanvas(){
+        const context = rf_img_out.getContext('2d');
+        context.clearRect(0, 0, rf_img_out. width, rf_img_out. height);
+    }
+
+    let loadedImg;
+    let loadedArray;
+    let finalArray = [];
+    let code = "";
+
+    async function getImageFromInput(fileInput) {
+        if (!(fileInput.files && fileInput.files[0]))
+        return;
+        clearCanvas();
+        const threshold = document.getElementById("threshold").value;
+        const reader = new FileReader();
+        const img = new Image();
+        let resolveFn;
+        const semaphore = new Promise((resolve) => {
+        resolveFn = resolve;
+        }); 
+        reader.onload = function(e) {
+            img.src = e.target.result;
+        };
+
+      img.onload = function() {
+        loadedImg = img;
+        var context = rf_img_out.getContext("2d");
+        context.drawImage(img,0,0);
+        const imageData = context.getImageData(0, 0, img.width, img.height);
+        loadedArray = imageData.data;
+        resolveFn();
+      };
+
+      reader.readAsDataURL(fileInput.files[0]);
+      await semaphore;
+
+      let grayScaleImageData = new ImageData(img.width, img.height);
+      let grayScaleThresholdImageData = new ImageData(img.width, img.height);
+      finalArray.length = 0;
+
+      for (let i = 0; i < loadedArray.length / 4; i++)
+      {
+        let r = loadedArray[4 * i + 0];
+        let g = loadedArray[4 * i + 1];
+        let b = loadedArray[4 * i + 2];
+        //let a = loadedArray[4 * i + 3];
+
+        let y = 0.2126 * r
+              + 0.7152 * g
+              + 0.0722 * b;
+
+        let yt = Math.floor(((y - threshold) / 255) + 1);
+        let ytt = yt *255;
+
+        grayScaleImageData.data[4 * i + 0] = y;
+        grayScaleImageData.data[4 * i + 1] = y;
+        grayScaleImageData.data[4 * i + 2] = y;
+        grayScaleImageData.data[4 * i + 3] = 255;
+
+        grayScaleThresholdImageData.data[4 * i + 0] = ytt;
+        grayScaleThresholdImageData.data[4 * i + 1] = ytt;
+        grayScaleThresholdImageData.data[4 * i + 2] = ytt;
+        grayScaleThresholdImageData.data[4 * i + 3] = 255;
+
+        finalArray[i] = yt;
+      }
+      var context = rf_img_out.getContext("2d");
+      //context.putImageData(grayScaleImageData, 32, 0);
+      context.putImageData(grayScaleThresholdImageData, 0, 0);
+      console.log("loaded array: "+loadedArray);
+      console.log(grayScaleThresholdImageData);
+      drawCode();
+    }
+
+    function drawCode() {
+        let jump = 0.5;       // distance between the lines [mm]
+        let pxLength = 0.5;   // lenght of a pixel [mm]
+        //let penState = true;   // is the work pen UP rn
+        // let previousPenState = penState;
+        let start = true;
+        let workDepth = 5;  // the paper Z to be driven down to contact the paper [mm]
+
+        // for (let h = 0; h < loadedImg.height ; h++){
+        //     let px = h*loadedImg.width;
+        //     let prev_px = Math.abs(px-1);
+        //     let mov_x = 0;
+        //     code = code + '\n';
+            
+        //     for (let w = h*loadedImg.width; w < (h+1)*loadedImg.width; w++) {
+        //         px = finalArray[w];
+        //         if (px == 1){
+        //             code = code + '1';
+        //         } else if (px == 0){
+        //             code = code + '0';
+        //         }
+        //     }
+        // }
+        code = "F1000 \n;start sequence:\n";
+
+        for (let h = 0; h < loadedImg.height ; h++){
+            let px = h*loadedImg.width;
+            let prev_px = Math.abs(px-1); //prev_px, an opposite of px - 0->1  1->0
+            let px_ch=0;
+            let mov_x = 0;
+            code = code +  `G90\n
+                            G1 Z0\n
+                            G1 X0 Y-${h*jump}\n
+                            G91\n`;
+            // penState = true;
+            
+            for (let w = h*loadedImg.width; w < (h+1)*loadedImg.width; w++) {
+                px = finalArray[w];
+                if (px == prev_px) {
+                    mov_x = mov_x + pxLength;
+                } else if (px == 0) {
+                    code = code +  `G1 X${mov_x}\n
+                                    G90\n
+                                    G1 Z-${workDepth}\n
+                                    G91\n`;
+                    mov_x=0;
+                } else if (px == 1) {
+                    code = code +  `G1 X${mov_x}\n
+                                    G90\n
+                                    G1 Z0\n
+                                    G91\n`;
+                    mov_x=0;
+                }
+                prev_px = px;
+            }
+        }
+
+        rf_output.innerText = code;
+
+    }
+    
+    function on() {
+        rf_dv2.style.setProperty("background-color", "white");
+        rf_x1.style.setProperty("background-color", "black");
+        rf_x2.style.setProperty("background-color", "black");
+        rf_x1.style.setProperty("width", "5px");
+        rf_x2.style.setProperty("width", "5px");
+    }
+    function off() {
+        rf_dv2.style.setProperty("background-color", "black");
+        rf_x1.style.setProperty("background-color", "white");
+        rf_x2.style.setProperty("background-color", "white");
+        rf_x1.style.setProperty("width", "3px");
+        rf_x2.style.setProperty("width", "3px");
+    }
+
+    function exit() {
+        //console.log("exit");
+        window.close();
+    }
+
+    document.getElementById("threshold").addEventListener("change", drawFile);
+    rf_dv2.addEventListener("mouseover", on);
+    rf_dv2.addEventListener("mouseout", off);
+    rf_dv2.addEventListener("click", exit);
+</script>
+
+</body>
+</html>
+

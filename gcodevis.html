@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+
+#title1{
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 200%;
+    /* font-size: clamp(100%,200%,200%); */
+    padding-left: 30px;
+    padding-right: 30px;
+}
+@media (max-width: 750px) {
+    #title1{
+    font-size: 110%;
+ }
+}
+
+#title_dv1{
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+}
+
+#title_dv2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
+    border: solid 3px;
+    border-color: white;
+    margin: -2px;
+    min-width: 70px;
+}
+
+#box1 {
+    flex-grow: 1;
+}
+#box2 {
+    margin-top: 25px;
+    width: 150px;
+    height: 100%;
+}
+#box3 {
+    flex-grow: 1;
+}
+#box4 {
+    width: 200px;
+}
+
+#ok_button {
+    width: 100px;
+    height: 75px;
+}
+
+#myCanvas {
+    margin-left: -10px;
+}
+
+</style>
+
+<head>
+    <link rel="stylesheet" href="program-style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G-Code</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Tiny5&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/flexi-ibm-vga-false" rel="stylesheet">
+    <link rel="shortcut icon" href="img/icon_2.png" />
+</head>
+
+<body class="all" id="all">
+    <p class="special">At that time Solomon assembled the el-
+        ders of Israel, all the tribal heads and the
+        ancestral leaders of the Israelites before him
+        at Jerusalem in order to bring the ark of the
+        Lord’s covenant from the city of David, that is
+        Zion. 2 So all the men of Israel were assembled
+        in the presence of King Solomon in the month
+        of Ethanim, which is the seventh month, b at
+        the festival.
+        3 All the elders of Israel came, and the priests
+        picked up the ark. 4 The priests and the Levites
+        brought the ark of the Lord, the tent of meet-
+        ing, and the holy utensils that were in the tent.
+        5 King Solomon and the entire congregation of
+        Israel, who had gathered around him and were
+        with him in front of the ark, were sacrificing
+        sheep, goats, and cattle that could not be count-
+        ed or numbered, because there were so many.
+        6 The priests brought the ark of the Lord’s
+        covenant to its place, into the inner sanctuary
+        of the temple, to the most holy place beneath
+        the wings of the cherubim. 7 For the cherubim
+        were spreading their wings over c the place of
+        the ark, so that the cherubim covered the ark
+        and its poles from above. 8 The poles were so
+        long that their ends were seen from the holy
+        place in front of the inner sanctuary, but they
+        were not seen from outside the sanctuary; they
+        are still there today. 9 Nothing was in the ark
+        except the two stone tablets that Moses had
+        put there at Horeb, d where the Lord made a
+        covenant with the Israelites when they came
+        out of the land of Egypt.
+        </p>
+    <div class="spacing_bar"></div>
+    
+        <div class="content_all">
+            <div class="title_box">
+                <div id="title_dv1">
+                    <span id="title1"><span>C:\Portfolio\</span><span>gcode-visualiser.exe</span></span>
+                </div>
+                <div id="title_dv2">
+                    <div id="x1" class="title_x" style="transform: rotate(45deg); position: relative;"></div>
+                    <div id="x2" class="title_x" style="transform: rotate(-45deg); position: absolute;"></div>
+                </div>
+            </div>
+            <div class="main_text_box">
+
+                <canvas id="myCanvas" width="700" height="500" style="border:1px solid rgb(255, 255, 255)"></canvas>
+                <div id="box1" class="form_item_box">
+                    <input onclick="update()" value="compile" type="button">
+                    <h3>Type g-code:</h3>
+                    
+                    <textarea id="gcode-input" rows="4" cols="50" ></textarea>
+                </div>
+            </div>
+        </div>
+    
+    <div class="spacing_bar"></div>
+
+<script>
+    const rf_dv2 = document.getElementById("title_dv2");
+    const rf_x1 = document.getElementById("x1");
+    const rf_x2 = document.getElementById("x2");
+    const rf_all = document.getElementById("all");
+
+    const rf_gcode = document.getElementById("gcode-input");
+    
+    function on() {
+        rf_dv2.style.setProperty("background-color", "white");
+        rf_x1.style.setProperty("background-color", "black");
+        rf_x2.style.setProperty("background-color", "black");
+        rf_x1.style.setProperty("width", "5px");
+        rf_x2.style.setProperty("width", "5px");
+    }
+    function off() {
+        rf_dv2.style.setProperty("background-color", "black");
+        rf_x1.style.setProperty("background-color", "white");
+        rf_x2.style.setProperty("background-color", "white");
+        rf_x1.style.setProperty("width", "3px");
+        rf_x2.style.setProperty("width", "3px");
+    }
+
+    function exit() {
+        //console.log("exit");
+        window.close();
+    }
+
+    // function getGcodeValue() {
+    // if (x_txt != -1) {
+    //     x_txt++;
+    //     var space = false;
+    //     while (x_txt < command[n].length && !space) {
+    //         // console.log(x_txt);
+    //         var char_rn = command[n].charAt(x_txt);
+    //         // test if char is from A-Z or a-z => if there is a new X/Y/Z value
+    //         if (/[A-Za-z]/.test(char_rn)) {
+    //             space = true;
+    //         }else {
+    //             comm_x_value = comm_x_value + command[n].charAt(x_txt);
+    //             x_txt++;
+    //         }
+    //     }
+    //     console.log("X= " + comm_x_value);
+    // }
+    // }
+
+
+    let command = [];
+    let command_position = [,,];
+    var abs_pos_x = 0;
+    var abs_pos_y = 0;
+    var abs_pos_z = 0;
+    var paper_lvl = -5; // default -5 value
+    function update() {
+        var absolute = true; //absolute position by default
+        paper_lvl = -5.0;
+
+        // var end=false;
+
+        var command_n = 0;
+        command[command_n] = "";
+        var code_text = rf_gcode.value;
+
+        console.log(code_text);
+
+        let code_lenght;
+        code_length = code_text.length+1;
+
+        for (let n=0; n < code_length; n++) {
+            if(code_text.charAt(n)=='\n') {
+                command_n++;
+                // console.log("command: "+command_n);
+                command[command_n] = "";
+            }
+            else{
+                // console.log(code_text.charAt(n));
+                command[command_n] = command[command_n] + code_text.charAt(n);
+            }
+            
+        }
+        for (let n=0; n < command_n+1; n++) {
+            console.log(command[n]);
+            // if command "does nothing" for drawing itself
+            if (/[MFS;]/.test(command[n]) || command[n].length == 0) 
+            {
+                console.log("no action");
+            }
+            
+            else if (command[n].charAt(0)=='G') {
+                // absolute or incremental values 
+                if (command[n].charAt(1)=='9') {
+                    if (command[n].charAt(2)=='1') {absolute = false;}
+                    else if (command[n].charAt(2)=='0') {absolute = true;}
+                }
+                // if command changes the position - is a movemnt command G0 or G1
+                if (command[n].charAt(1)=='0' || command[n].charAt(1)=='1') {
+                    console.log("move command");
+                    var x_txt = command[n].search("X");
+                    var y_txt = command[n].search("Y");
+                    var z_txt = command[n].search("Z");
+                    var comm_x_value = "0";
+                    var comm_y_value = "0";
+                    var comm_z_value = "0";
+                    // console.log(x_txt + " " + y_txt + " " + z_txt);
+                    if (x_txt != -1) {
+                        x_txt++;
+                        var space = false;
+                        while (x_txt < command[n].length && !space) {
+                            // console.log(x_txt);
+                            var char_rn = command[n].charAt(x_txt);
+                            // test if char is from A-Z or a-z => if there is a new X/Y/Z value
+                            if (/[A-Za-z]/.test(char_rn)) {
+                                space = true;
+                            }else {
+                                comm_x_value = comm_x_value + command[n].charAt(x_txt);
+                                x_txt++;
+                            }
+                        }
+                        comm_x_value = parseFloat(comm_x_value);
+                        console.log("X= " + comm_x_value);
+
+                        if(absolute){
+                            abs_pos_x = comm_x_value;
+                        } else {
+                            abs_pos_x = abs_pos_x + comm_x_value;
+                        }
+                    }
+
+                    if (y_txt != -1) {
+                        y_txt++;
+                        var space = false;
+                        while (y_txt < command[n].length && !space) {
+                            // console.log(y_txt);
+                            var char_rn = command[n].charAt(y_txt);
+                            // test if char is from A-Z or a-z => if there is a new X/Y/Z value
+                            if (/[A-Za-z]/.test(char_rn)) {
+                                space = true;
+                            }else {
+                                comm_y_value = comm_y_value + command[n].charAt(y_txt);
+                                y_txt++;
+                            }
+                        }
+                        comm_y_value = parseFloat(comm_y_value);
+                        console.log("Y= " + comm_y_value);
+
+                        if(absolute){
+                            abs_pos_y = comm_y_value;
+                        } else {
+                            abs_pos_y = abs_pos_y + comm_y_value;
+                        }
+                    }
+
+                    if (z_txt != -1) {
+                        z_txt++;
+                        var space = false;
+                        while (z_txt < command[n].length && !space) {
+                            // console.log(y_txt);
+                            var char_rn = command[n].charAt(z_txt);
+                            // test if char is from A-Z or a-z => if there is a new X/Y/Z value
+                            if (/[A-Za-z]/.test(char_rn)) {
+                                space = true;
+                            }else {
+                                comm_z_value = comm_z_value + command[n].charAt(z_txt);
+                                z_txt++;
+                            }
+                        }
+                        comm_z_value = parseFloat(comm_z_value);
+                        console.log("Z= " + comm_z_value);
+
+                        if(absolute){
+                            abs_pos_z = comm_z_value;
+                        } else {
+                            abs_pos_z = abs_pos_z + comm_z_value;
+                        }
+                    }
+                    command_position.push([abs_pos_x,abs_pos_y,abs_pos_z]);
+                    console.log("absX:"+abs_pos_x+" absY:"+ abs_pos_y+" absZ:"+abs_pos_z);
+
+                }
+
+            }
+
+        }
+
+        console.log(command_position);
+
+    };
+
+
+
+    rf_dv2.addEventListener("mouseover", on);
+    rf_dv2.addEventListener("mouseout", off);
+    rf_dv2.addEventListener("click", exit);
+</script>
+
+</body>
+</html>
