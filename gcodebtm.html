@@ -112,7 +112,7 @@
         <div class="content_all">
             <div class="title_box">
                 <div id="title_dv1">
-                    <span id="title1"><span>C:\Portfolio\</span><span>gcode-bitmap-conv.exe</span></span>
+                    <span class="dont_touch" id="title1"><span>C:\Portfolio\</span><span>gcode-bitmap-conv.exe</span></span>
                 </div>
                 <div id="title_dv2">
                     <div id="x1" class="title_x" style="transform: rotate(45deg); position: relative;"></div>
@@ -126,6 +126,8 @@
                 <input type="button" onclick="clearCanvas()" value="clear"/>
                 <canvas id="output_image" width="1000" height="1000"></canvas>
                 <div class="bordered" style="margin-top: 20px;">
+                    <h3 class="dont_touch note_text">Matrix out:</h3>
+                    <p class="dont_touch" id="matrix_out"></p>
                     <h3 class="dont_touch note_text">Code out:</h3>
                     <br>
                     <p id="code_out"></p>
@@ -147,6 +149,7 @@
     const rf_img_out = document.getElementById("output_image")
 
     const rf_output = document.getElementById("code_out");
+    const rf_matrix = document.getElementById("matrix_out");
 
     // get file from FileInput
 
@@ -231,12 +234,86 @@
     }
 
     function drawCode() {
-        let jump = 0.5;       // distance between the lines [mm]
-        let pxLength = 0.5;   // lenght of a pixel [mm]
-        //let penState = true;   // is the work pen UP rn
+        let jump = 1;       // distance between the lines [mm]
+        let pxLength = 1;   // lenght of a pixel [mm]
+        let penState = false;   // is the work pen DOWN rn
         // let previousPenState = penState;
-        let start = true;
+        //let start = true;
         let workDepth = 5;  // the paper Z to be driven down to contact the paper [mm]
+
+        let matrix_code = "";
+        //matrix out:
+        for (let h = 0; h < loadedImg.height ; h++){
+            matrix_code= matrix_code + `\n`;
+            for (let w = h*loadedImg.width; w < (h+1)*loadedImg.width; w++) {
+                matrix_code = matrix_code + `${finalArray[w]} `;
+            }
+
+        }
+        rf_matrix.innerText = matrix_code;
+
+        let code = `G90
+                    F1000
+                    ;start sequence!
+                    \n`
+
+        for (let h = 0; h < loadedImg.height ; h++){
+            let px = finalArray[h*loadedImg.width];
+            let prev_px = Math.abs(px-1); //prev_px, an opposite of px - 0->1  1->0
+            //let px = 0;
+            //let prev_px = 0;
+            let mov_x = 0; //x position on a line
+            let lineStart = true;
+            
+            // go to next line
+            // code = code +  `G90
+            //                 G1 Z0
+            //                 G1 X0 Y-${h*jump}\n`;
+
+            code = code + ` ;Y pos change, tool UP
+                            G1 Z0\n\n`;
+            
+            for (let w = h*loadedImg.width; w < (h+1)*loadedImg.width; w++) {
+                px = finalArray[w];
+                mov_x = mov_x + pxLength;
+                if (w == (h+1)*loadedImg.width-1){
+                    if (penState==true){ // sprawdza czy jest koniec MAIN lini - czy zakaczyc pod-linie
+                        code = code +  `G1 X${mov_x} Y-${h*jump}
+                                        G1 Z0
+                                        ;line end: ${w}\n`;
+                    }
+                    code = code + `;....................\n\n`;
+                }
+
+                if (px == 1) {
+                    if (prev_px == 0) { // koniec lini - move to end pos and tool up
+                        code = code +  `G1 X${mov_x} Y-${h*jump}
+                                        G1 Z0
+                                        ;line end: ${w}
+                                        \n`;
+                        penState = false;
+                        
+                    }
+                
+                } else if (px == 0) {
+                    if (prev_px == 1 ) { // start lini - move to start pos and tool down
+                        code = code +  `;start line: ${w} 
+                                        G1 X${mov_x} Y-${h*jump}
+                                        G1 Z-${workDepth}
+                                        \n`;
+                        penState = true;
+                        
+                    }
+                    mov_x = mov_x + pxLength;
+                }
+                prev_px = px;
+            }
+
+        }
+
+
+
+
 
         // for (let h = 0; h < loadedImg.height ; h++){
         //     let px = h*loadedImg.width;
@@ -253,39 +330,139 @@
         //         }
         //     }
         // }
-        code = "F1000 \n;start sequence:\n";
 
-        for (let h = 0; h < loadedImg.height ; h++){
-            let px = h*loadedImg.width;
-            let prev_px = Math.abs(px-1); //prev_px, an opposite of px - 0->1  1->0
-            let px_ch=0;
-            let mov_x = 0;
-            code = code +  `G90\n
-                            G1 Z0\n
-                            G1 X0 Y-${h*jump}\n
-                            G91\n`;
-            // penState = true;
+        // const NO_DRAW  = 0;
+        // const DO_DRAW  = 1;
+        // const NEW_LINE = 2;
+
+        // let cmdbuf = [];
+        // let last_px = finalArray[0];
+        // let count = 1;
+
+        // for (let n = 1; n < finalArray.length; n++)
+        // {
+        //     let w = n % loadedImg.width;
+        //     let h = (n - w) / loadedImg.width;
+        //     let px = finalArray[n];
+        //     let zero_w = n % loadedImg.width == 0;
+        //     let push_cmd = last_px != px || zero_w;
             
-            for (let w = h*loadedImg.width; w < (h+1)*loadedImg.width; w++) {
-                px = finalArray[w];
-                if (px == prev_px) {
-                    mov_x = mov_x + pxLength;
-                } else if (px == 0) {
-                    code = code +  `G1 X${mov_x}\n
-                                    G90\n
-                                    G1 Z-${workDepth}\n
-                                    G91\n`;
-                    mov_x=0;
-                } else if (px == 1) {
-                    code = code +  `G1 X${mov_x}\n
-                                    G90\n
-                                    G1 Z0\n
-                                    G91\n`;
-                    mov_x=0;
-                }
-                prev_px = px;
-            }
-        }
+        //     if (push_cmd)
+        //     {
+        //         cmdbuf.push({ c: px == 1 ? DO_DRAW : NO_DRAW, n: count });
+        //         count = 0;
+        //     }
+
+        //     if (zero_w)
+        //     {
+        //         cmdbuf.push({ c: NEW_LINE, n: h });
+        //     }
+
+        //     count++;
+        //     last_px = px;
+        // }
+
+        // code = "F1000 \n;start sequence:\n";
+        // cmdbuf.forEach(cmd => {
+        //     switch (cmd.c) {
+        //         case NEW_LINE:
+        //             code += `G90
+        //                      G1 Z0
+        //                      G1 X0 Y-${cmd.n*jump}
+        //                      G91\n`;
+        //             break;
+        //         case DO_DRAW:
+        //             code += `G1 X${cmd.n}
+        //                      G90
+        //                      G1 Z0
+        //                      G91\n`;
+        //             break;
+        //         case NO_DRAW:
+        //             code += `G1 X${cmd.n}
+        //                      G90
+        //                      G1 Z-${workDepth}
+        //                      G91\n`;
+        //             break;
+        //     }
+        // });
+
+        // for (let h = 0; h < loadedImg.height ; h++){
+        //     let px = finalArray[h*loadedImg.width];
+        //     let prev_px = Math.abs(px-1); //prev_px, an opposite of px - 0->1  1->0
+        //     let mov_x = 0;
+            
+        //     // go to next line
+        //     code = code +  `G90
+        //                     G1 Z0
+        //                     G1 X0 Y-${h*jump}
+        //                     G91\n`;
+        //     // penState = true;
+            
+        //     for (let w = h*loadedImg.width; w < (h+1)*loadedImg.width; w++) {
+        //         px = finalArray[w];
+        //         if (px == prev_px) {
+        //             mov_x = mov_x + pxLength;
+        //         } else if (px == 0) {
+        //             code = code +  `G1 X${mov_x}
+        //                             G90
+        //                             G1 Z-${workDepth}
+        //                             G91\n`;
+        //             mov_x=0;
+        //         } else if (px == 1) {
+        //             code = code +  `G1 X${mov_x}
+        //                             G90
+        //                             G1 Z0
+        //                             G91\n`;
+        //             mov_x=0;
+        //         }
+        //         prev_px = px;
+        //     }
+
+        //     for (let w = 0; w < loadedImg.width; w++)
+        //     {
+        //         px = finalArray[h * loadedImg.width + w];
+
+        //         if (px == prev_px)
+        //         {
+        //             mov_x++;
+        //         }
+
+        //         prev_px = px;
+        //     }
+        // }
+
+        // let mov_x = 0;
+        // let last_px = 0;
+        // for (let n = 0; n < finalArray.length; n++)
+        // {
+        //     let w = n % loadedImg.width;
+        //     let h = (n - w) / loadedImg.width;
+
+        //     if (w == 0)
+        //     {
+        //         code += `G90
+        //                 G1 Z0
+        //                 G1 X0 Y-${h*jump}
+        //                 G91\n`;
+        //         mov_x = 0;
+        //         last_px = finalArray[n];
+        //     }
+
+        //     let px = finalArray[h * loadedImg.width + w];
+
+        //     // console.log(n, w, h, px, last_px);
+
+        //     if (last_px != px || w == loadedImg.width - 1)
+        //     {
+        //         code += `G1 X${mov_x}
+        //             G90
+        //             G1 Z-${px == 0 ? workDepth : 0}
+        //             G91\n`;
+        //     }
+            
+        //     last_px = px;
+        //     mov_x = 0;
+        // }
 
         rf_output.innerText = code;
 
